@@ -21,7 +21,6 @@ public class SugarLevelComputer {
 	  List<Date> timeSamples = getSampledTime(startDate, endDate, timeStep);
 	  List<Triplet<Date, Boolean, SugarLevelEvent>> keyedEvents = keyByTime(events);
 	  Collections.sort(keyedEvents, new Comparator<Triplet<Date, Boolean, SugarLevelEvent>>(){
-		@Override
 		public int compare(Triplet<Date, Boolean, SugarLevelEvent> o1,
 				Triplet<Date, Boolean, SugarLevelEvent> o2) {
 			return o1.getValue0().equals(o2.getValue0()) ? 0 :

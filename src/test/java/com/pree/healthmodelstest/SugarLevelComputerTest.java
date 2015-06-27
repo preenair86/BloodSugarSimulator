@@ -41,7 +41,13 @@ public class SugarLevelComputerTest {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		SugarLevelFactor eventFactor = new SugarLevelFactor("Food", 120, true, 120.0f);
+		
+		SugarLevelFactor eventFactor = new SugarLevelFactor();
+		eventFactor.setName("Food");
+		eventFactor.setDoesIncrease(true);
+		eventFactor.setDuration(120.0f);
+		eventFactor.setRate(240);
+		
 		events.add(new SugarLevelEvent(eventFactor, eventTime));
 		List<Pair<Date, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
 		System.out.println("Expected output of singleEventTest is ");
@@ -60,8 +66,18 @@ public class SugarLevelComputerTest {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		SugarLevelFactor eventFactor1 = new SugarLevelFactor("Food", 120, true, 120.0f);
-		SugarLevelFactor eventFactor2 = new SugarLevelFactor("Exercise", 60, false, 60.0f);
+		SugarLevelFactor eventFactor1 = new SugarLevelFactor();
+		eventFactor1.setName("Food");
+		eventFactor1.setDoesIncrease(true);
+		eventFactor1.setDuration(120.0f);
+		eventFactor1.setRate(120);
+
+		SugarLevelFactor eventFactor2 = new SugarLevelFactor();
+		eventFactor2.setName("Exercise");
+		eventFactor2.setDoesIncrease(false);
+		eventFactor2.setDuration(60.0f);
+		eventFactor2.setRate(60);
+		
 		events.add(new SugarLevelEvent(eventFactor2, eventTime2));
 		events.add(new SugarLevelEvent(eventFactor1, eventTime1));
 		List<Pair<Date, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);

@@ -2,15 +2,6 @@ package com.pree.healthmodels;
 
 // A factor that influences the blood sugar level.
 public class SugarLevelFactor {
-	public SugarLevelFactor(String name, int rate, boolean doesIncrease,
-			float duration) {
-		super();
-		this.name = name;
-		this.rate = rate;
-		this.doesIncrease = doesIncrease;
-		this.duration = duration;
-	}
-
 	private String name;
 	// Rate of change of blood sugar level per minute.
 	private int rate;
