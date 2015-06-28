@@ -48,33 +48,18 @@ public class SugarLevelSimulatorService {
 		Gson gson = new Gson();
 		SugarLevelSimulatorInputs simulatorInput = gson.fromJson(input,SugarLevelSimulatorInputs.class);
 		System.out.println("Input is " + simulatorInput.toString());
-		SugarLevelSimulator simulator = new SugarLevelSimulator();
-		
-		Map<String, SugarLevelFactor> nameToFactor = new HashMap<String, SugarLevelFactor>();
-		SugarLevelFactor factor1 = new SugarLevelFactor();
-		factor1.setName("A");factor1.setRate(120);factor1.setDuration(120.0f);factor1.setDoesIncrease(true);
-		nameToFactor.put(factor1.getName(), factor1);
-		factor1.setName("B");factor1.setRate(60);factor1.setDuration(120.0f);factor1.setDoesIncrease(true);
-		nameToFactor.put(factor1.getName(), factor1);
-		factor1.setName("C");factor1.setRate(240);factor1.setDuration(120.0f);factor1.setDoesIncrease(true);
-		nameToFactor.put(factor1.getName(), factor1);
-		factor1.setName("D");factor1.setRate(120);factor1.setDuration(60.0f);factor1.setDoesIncrease(false);
-		nameToFactor.put(factor1.getName(), factor1);
-		factor1.setName("E");factor1.setRate(60);factor1.setDuration(60.0f);factor1.setDoesIncrease(false);
-		nameToFactor.put(factor1.getName(), factor1);
-		factor1.setName("F");factor1.setRate(240);factor1.setDuration(60.0f);factor1.setDoesIncrease(false);
-		nameToFactor.put(factor1.getName(), factor1);
-		
-		simulator.setNameToFactor(nameToFactor);
-		return gson.toJson(simulator.simulateGlucoseLevels(simulatorInput));
+		SugarLevelDao dao = new SugarLevelDao();
+		Map<String, SugarLevelFactor> nameToFactor = dao.getNameToFactor();
+		SugarLevelSimulator.setNameToFactor(nameToFactor);
+		return gson.toJson(SugarLevelSimulator.simulateGlucoseLevels(simulatorInput));
 	}
 	
 	@GET
 	@Path("getFoodList")
 	@Produces("application/json")
 	public String getFoodList() {
-		// TODO(preenair): Get the real list from database.
-		List<String> foodList = new ArrayList<String>(Arrays.asList("A","B","C"));
+		SugarLevelDao dao = new SugarLevelDao();
+		List<String> foodList = dao.getFoodList();
 		System.out.println("Returning " + ListToJSONArray(foodList));
 		return ListToJSONArray(foodList).toString();
 	}
@@ -83,8 +68,8 @@ public class SugarLevelSimulatorService {
 	@Path("getExerciseList")
 	@Produces("application/json")
 	public String getExerciseList() {
-		// TODO(preenair): Get the real list from database.
-		List<String> exerciseList = new ArrayList<String>(Arrays.asList("D","E","F"));
+		SugarLevelDao dao = new SugarLevelDao();
+		List<String> exerciseList = dao.getExerciseList();
 		System.out.println("Returning " + ListToJSONArray(exerciseList));
 		return ListToJSONArray(exerciseList).toString();
 	}
