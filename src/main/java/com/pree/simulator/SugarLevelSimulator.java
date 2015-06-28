@@ -8,14 +8,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.javatuples.Pair;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
+import com.pree.dao.SugarLevelDao;
 import com.pree.healthmodels.SugarLevelComputer;
 import com.pree.healthmodels.SugarLevelEvent;
 import com.pree.healthmodels.SugarLevelFactor;
 
 public class SugarLevelSimulator {
-	private static Date startTime, endTime;
-	private static float timeStep;
 	private static Map<String, SugarLevelFactor> nameToFactor;
 
 	public static Map<String, SugarLevelFactor> getNameToFactor() {
@@ -27,21 +29,13 @@ public class SugarLevelSimulator {
 		SugarLevelSimulator.nameToFactor = factorToProperties;
 	}
 
-	public SugarLevelSimulator() {
-		try {
-			startTime = new SimpleDateFormat("hh:mm:ss").parse("07:00:00");
-			endTime = new SimpleDateFormat("hh:mm:ss").parse("11:00:00");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		timeStep = 10.0f;
-	}
-
 	public static SugarLevelSimulatorOutputs simulateGlucoseLevels(
 			SugarLevelSimulatorInputs input) {
+		System.out.println("Simulator input is " + input.toString());
 		List<SugarLevelEvent> events = toSugarLevelEvents(input);
-		List<Pair<Date, Float>> glucoseLevels = SugarLevelComputer
-				.getGlucoseLevels(startTime, endTime, timeStep, events);
+		SugarLevelDao dao = new SugarLevelDao();
+		List<Pair<LocalTime, Float>> glucoseLevels = SugarLevelComputer
+				.getGlucoseLevels(dao.getStartTime(), dao.getEndTime(), dao.getTimeStep(), events);
 		return toSugarLevelSimulatorOutput(glucoseLevels);
 	}
 
@@ -50,24 +44,19 @@ public class SugarLevelSimulator {
 		List<SugarLevelEvent> output = new ArrayList<SugarLevelEvent>();
 		for (SugarLevelInputPoint point : input.getData()) {
 			SugarLevelFactor currentFactor = nameToFactor.get(point.getName()); 
-			Date currentTime = null;
-			try {
-				currentTime = new SimpleDateFormat("hh:mm:ss").parse(point
-						.getTime());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			SugarLevelEvent currentEvent = new SugarLevelEvent(currentFactor,
-					currentTime);
+			LocalTime currentTime = new LocalTime();
+			DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
+			currentTime = LocalTime.parse(point.getTime(), formatter);
+			SugarLevelEvent currentEvent = new SugarLevelEvent(currentFactor, currentTime);
 			output.add(currentEvent);
 		}
 		return output;
 	}
 	
 	private static SugarLevelSimulatorOutputs toSugarLevelSimulatorOutput(
-			List<Pair<Date, Float>> input) {
+			List<Pair<LocalTime, Float>> input) {
 		List<SugarLevelOutputPoint> points = new ArrayList<SugarLevelOutputPoint>();
-		for(Pair<Date, Float> glucoseLevel : input) {
+		for(Pair<LocalTime, Float> glucoseLevel : input) {
 			SugarLevelOutputPoint currentPoint = new SugarLevelOutputPoint();
 			currentPoint.setGlucoselevel(glucoseLevel.getValue1());
 			currentPoint.setTime(glucoseLevel.getValue0().toString());

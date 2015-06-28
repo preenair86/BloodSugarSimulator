@@ -1,6 +1,12 @@
 package com.pree.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -10,7 +16,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.LocalTime;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.pree.dao.SugarLevelDao;
 import com.pree.healthmodels.SugarLevelFactor;
 import com.pree.simulator.SugarLevelSimulator;
 import com.pree.simulator.SugarLevelSimulatorInputs;
@@ -40,12 +52,69 @@ public class SugarLevelSimulatorService {
 		
 		Map<String, SugarLevelFactor> nameToFactor = new HashMap<String, SugarLevelFactor>();
 		SugarLevelFactor factor1 = new SugarLevelFactor();
-		factor1.setName("Food");
-		factor1.setRate(120);
-		factor1.setDuration(60.0f);
-		factor1.setDoesIncrease(true);
+		factor1.setName("A");factor1.setRate(120);factor1.setDuration(120.0f);factor1.setDoesIncrease(true);
 		nameToFactor.put(factor1.getName(), factor1);
+		factor1.setName("B");factor1.setRate(60);factor1.setDuration(120.0f);factor1.setDoesIncrease(true);
+		nameToFactor.put(factor1.getName(), factor1);
+		factor1.setName("C");factor1.setRate(240);factor1.setDuration(120.0f);factor1.setDoesIncrease(true);
+		nameToFactor.put(factor1.getName(), factor1);
+		factor1.setName("D");factor1.setRate(120);factor1.setDuration(60.0f);factor1.setDoesIncrease(false);
+		nameToFactor.put(factor1.getName(), factor1);
+		factor1.setName("E");factor1.setRate(60);factor1.setDuration(60.0f);factor1.setDoesIncrease(false);
+		nameToFactor.put(factor1.getName(), factor1);
+		factor1.setName("F");factor1.setRate(240);factor1.setDuration(60.0f);factor1.setDoesIncrease(false);
+		nameToFactor.put(factor1.getName(), factor1);
+		
 		simulator.setNameToFactor(nameToFactor);
 		return gson.toJson(simulator.simulateGlucoseLevels(simulatorInput));
+	}
+	
+	@GET
+	@Path("getFoodList")
+	@Produces("application/json")
+	public String getFoodList() {
+		// TODO(preenair): Get the real list from database.
+		List<String> foodList = new ArrayList<String>(Arrays.asList("A","B","C"));
+		System.out.println("Returning " + ListToJSONArray(foodList));
+		return ListToJSONArray(foodList).toString();
+	}
+	
+	@GET
+	@Path("getExerciseList")
+	@Produces("application/json")
+	public String getExerciseList() {
+		// TODO(preenair): Get the real list from database.
+		List<String> exerciseList = new ArrayList<String>(Arrays.asList("D","E","F"));
+		System.out.println("Returning " + ListToJSONArray(exerciseList));
+		return ListToJSONArray(exerciseList).toString();
+	}
+	
+	@GET
+	@Path("getTimeList")
+	@Produces("application/json")
+	public String getTimeList() {
+		List<String> timeList = new ArrayList<String>();
+		SugarLevelDao dao = new SugarLevelDao();
+		LocalTime startTime = dao.getStartTime();
+		LocalTime endTime = dao.getEndTime();
+		float timeStep = dao.getTimeStep();
+		while(startTime.isBefore(endTime)) {
+			timeList.add(startTime.toString("HH:mm"));
+			System.out.println(startTime.toString());
+			startTime = startTime.plusMinutes((int)timeStep);
+		}
+		System.out.println("Returning " + ListToJSONArray(timeList));
+		return ListToJSONArray(timeList).toString();
+	}
+	
+	private JsonArray ListToJSONArray(List<String> data) {
+		JsonArray jsonArray = new JsonArray();
+	    for(int i = 0; i < data.size(); ++i) {
+	        JsonObject obj = new JsonObject();
+	        obj.addProperty("id", i);
+	        obj.addProperty("value", data.get(i));
+	       jsonArray.add(obj);
+	    }
+	    return jsonArray;
 	}
 }

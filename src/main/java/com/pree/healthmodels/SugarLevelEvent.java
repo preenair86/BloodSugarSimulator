@@ -2,18 +2,19 @@ package com.pree.healthmodels;
 
 import java.util.Date;
 
+import org.joda.time.LocalTime;
+
 // SugarLevelEvent is an event that occurred during the day, which
 // influence the blood sugar levels. It includes a SugarLevelFactor
 // and the time at which it occurred.
 public class SugarLevelEvent {
-	public SugarLevelEvent(SugarLevelFactor factor, Date startTime) {
+	public SugarLevelEvent(SugarLevelFactor factor, LocalTime startTime) {
 		this.factor = factor;
 		this.startTime = startTime;
 	}
 
 	private SugarLevelFactor factor;
-	// Number of minutes from the beginning of the day where the event occurred.
-	private Date startTime;
+	private LocalTime startTime;
 
 	public SugarLevelFactor getFactor() {
 		return factor;
@@ -23,11 +24,11 @@ public class SugarLevelEvent {
 		this.factor = factor;
 	}
 
-	public Date getStartTime() {
+	public LocalTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.javatuples.Pair;
+import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,32 +16,14 @@ import com.pree.healthmodels.SugarLevelEvent;
 import com.pree.healthmodels.SugarLevelFactor;
 
 public class SugarLevelComputerTest {
-	private Date startTime = null, endTime = null;
-	private float timeStep;
-	@Before
-	public void Initialize() {
-		try {
-			startTime = new SimpleDateFormat("hh:mm:ss").parse("07:00:00");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			endTime = new SimpleDateFormat("hh:mm:ss").parse("11:00:00");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		timeStep = 1.0f;
-	}
+	private LocalTime startTime = new LocalTime(7, 0);
+	private LocalTime endTime = new LocalTime(11, 0);
+	private float timeStep = 1.0f;
 	
 	@Test
 	public void singleEventTest() {
-		Date eventTime = null;
+		LocalTime eventTime = new LocalTime(7, 0); 
 		List<SugarLevelEvent> events = new ArrayList<SugarLevelEvent>();
-		try {
-			eventTime = new SimpleDateFormat("hh:mm:ss").parse("08:00:00");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 		
 		SugarLevelFactor eventFactor = new SugarLevelFactor();
 		eventFactor.setName("Food");
@@ -49,7 +32,7 @@ public class SugarLevelComputerTest {
 		eventFactor.setRate(240);
 		
 		events.add(new SugarLevelEvent(eventFactor, eventTime));
-		List<Pair<Date, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
+		List<Pair<LocalTime, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
 		System.out.println("Expected output of singleEventTest is ");
 		for(int i = 0; i < actualOutput.size(); ++i) {
 			System.out.println("Time: " + actualOutput.get(i).getValue0() + ", Glucose Level is " + actualOutput.get(i).getValue1());
@@ -59,13 +42,7 @@ public class SugarLevelComputerTest {
 	@Test
 	public void twoEventTest() {
 		List<SugarLevelEvent> events = new ArrayList<SugarLevelEvent>();
-		Date eventTime1 = null, eventTime2 = null;
-		try {
-			eventTime1 = new SimpleDateFormat("hh:mm:ss").parse("08:00:00");
-			eventTime2 = new SimpleDateFormat("hh:mm:ss").parse("09:00:00");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		LocalTime eventTime1 = new LocalTime(8, 0), eventTime2 = new LocalTime(9, 0); ;
 		SugarLevelFactor eventFactor1 = new SugarLevelFactor();
 		eventFactor1.setName("Food");
 		eventFactor1.setDoesIncrease(true);
@@ -80,7 +57,7 @@ public class SugarLevelComputerTest {
 		
 		events.add(new SugarLevelEvent(eventFactor2, eventTime2));
 		events.add(new SugarLevelEvent(eventFactor1, eventTime1));
-		List<Pair<Date, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
+		List<Pair<LocalTime, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
 		System.out.println("Expected output of twoEventTest is ");
 		for(int i = 0; i < actualOutput.size(); ++i) {
 			System.out.println("Time: " + actualOutput.get(i).getValue0() + ", Glucose Level is " + actualOutput.get(i).getValue1());
