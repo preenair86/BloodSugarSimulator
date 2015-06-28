@@ -1,5 +1,13 @@
 var simulatorInput = {data:[]};
 
+var getContextPath = function() {
+	return document.URL;
+}
+
+var getNewAbsolutePath = function(absolutePath, previousSuffix, newSuffix) {
+	return absolutePath.replace(previousSuffix, newSuffix);
+}
+
 var getSimulatorInputText = function() {
   var output = "";
   for(var i = 0; i < simulatorInput.data.length; i++) {
@@ -59,11 +67,15 @@ var loadTimeList = function(timeList) {
 
 var getInitialData = function() {
 	var method = "GET";
-	var url = "http://localhost:8080/BloodSugarSimulator/simulator/getFoodList";
+	var currentPath = getContextPath();
+	var url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/getFoodList");
+	//var url = "http://localhost:8080/BloodSugarSimulator/simulator/getFoodList";
 	ajaxCall(url, method, null, loadFoodList);
-	url = "http://localhost:8080/BloodSugarSimulator/simulator/getExerciseList";
+	url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/getExerciseList");
+	//url = "http://localhost:8080/BloodSugarSimulator/simulator/getExerciseList";
 	ajaxCall(url, method, null, loadExerciseList);
-	url = "http://localhost:8080/BloodSugarSimulator/simulator/getTimeList";
+	url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/getTimeList");
+	//url = "http://localhost:8080/BloodSugarSimulator/simulator/getTimeList";
 	ajaxCall(url, method, null, loadTimeList);
 }
 
@@ -95,7 +107,8 @@ var plotGraph = function(object) {
 }
 
 var simulate = function() {
-	var url = "http://localhost:8080/BloodSugarSimulator/simulator/plotGraph";
+	var currentPath = getContextPath();
+	var url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/plotGraph");
 	var method = "POST";
 	var jsonString = JSON.stringify(simulatorInput);
 	ajaxCall(url, method, jsonString, plotGraph);
