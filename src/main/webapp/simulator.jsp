@@ -77,9 +77,6 @@
 							<textarea class="form-control" rows="6" id="history"></textarea>
 							<div class="btn-group btn-group-justified">
 								<div class="btn-group">
-									<button type="button" class="btn btn-primary" onclick="simulate()" id="plot">Plot</button>
-								</div>
-								<div class="btn-group">
 									<button type="button" class="btn btn-primary" onclick="clearData()" id="clear">Clear</button>
 								</div>
 							</div>
@@ -93,7 +90,7 @@
 						Glucose Level Simulation
 					</div>
 					<div class="panel-body">
-						<div id="glucose_plot"></div>
+						<div id="glucose_plot" style="width: 100%; height: 100%"></div>
 					</div>
 				</div>
 			</div>

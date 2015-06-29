@@ -11,6 +11,7 @@ var getNewAbsolutePath = function(absolutePath, previousSuffix, newSuffix) {
 var clearData = function() {
 	simulatorInput.data = [];
 	document.getElementById("history").value = getSimulatorInputText();
+	simulate();
 }
 
 var getSimulatorInputText = function() {
@@ -28,6 +29,7 @@ var addFoodConsumption = function() {
 	var foodTime = timeSelector.options[timeSelector.selectedIndex].text;
 	simulatorInput.data.push({name:foodName, isFood:true,time:foodTime});
 	document.getElementById("history").value = getSimulatorInputText();
+	simulate();
 }
 
 var addExerciseActivity = function() {
@@ -37,6 +39,7 @@ var addExerciseActivity = function() {
 	var exerciseTime = timeSelector.options[timeSelector.selectedIndex].text;
 	simulatorInput.data.push({name:exerciseName, isFood:false,time:exerciseTime});
 	document.getElementById("history").value = getSimulatorInputText();
+	simulate();
 }
 
 var loadFoodList = function(foodList) {
@@ -86,6 +89,7 @@ var getInitialData = function() {
 
 var onLoad = function() {
 	getInitialData();
+	simulate();
 }
 
 var plotGraph = function(object) {
@@ -101,16 +105,20 @@ var plotGraph = function(object) {
 	var options = {
 		title : 'Variation in glucose levels',
 		curveType : 'function',
+		colors: ['#2069a8'],
 		vAxis : {
-			viewWindowMode : 'explicit',
 			minvalue: 0,
 			maxValue: 200,
+			title: 'Levels'
+		},
+		hAxis : {
+			title: 'Time'
 		},
 		legend : {
 			position : 'bottom'
 		}
 	};
-	var chart = new google.visualization.LineChart(document
+	var chart = new google.visualization.AreaChart(document
 			.getElementById('glucose_plot'));
 
 	chart.draw(data, options);
