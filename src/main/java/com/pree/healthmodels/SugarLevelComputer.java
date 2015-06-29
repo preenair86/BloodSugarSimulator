@@ -27,23 +27,35 @@ public class SugarLevelComputer {
 			return o1.getValue0().isEqual(o2.getValue0()) ? 0 :
 				(o1.getValue0().isBefore(o2.getValue0()) ? -1 : 1);
 		}});
-	  float glycemicRate = 0.0f;
-	  float normalizationRate = 0.0f;
+	  float netGlycemicRate = 0.0f;
+	  float normalizationRate = 1.0f;
 	  float currentLevel = INITIAL_LEVEL;
 	  int nextEventIndex = 0;
+	  int numCurrentEvents = 0;
 	  List<Pair<LocalTime, Float>> output = new ArrayList<Pair<LocalTime, Float>>();
 	  for(int i = 0; i < timeSamples.size(); ++i) {
 		  if(nextEventIndex < keyedEvents.size() && !keyedEvents.get(nextEventIndex).getValue0().isAfter(timeSamples.get(i))) {
 			  Triplet<LocalTime, Boolean, SugarLevelEvent> nextEventTriplet = keyedEvents.get(nextEventIndex);
 			  SugarLevelEvent event = nextEventTriplet.getValue2();
 			  float changeInGlycemicRate = event.getFactor().getRate() / 60.0f * (event.getFactor().isDoesIncrease() ? 1 : -1); 
-			  glycemicRate += changeInGlycemicRate * (nextEventTriplet.getValue1() ? 1 : -1);
+			  netGlycemicRate += changeInGlycemicRate * (nextEventTriplet.getValue1() ? 1 : -1);
+			  if(nextEventTriplet.getValue1()) {
+				  ++numCurrentEvents;
+			  } else {
+				  --numCurrentEvents;
+			  }
 			  ++nextEventIndex;
 		  }
-		  currentLevel = currentLevel + (glycemicRate + normalizationRate) * timeStep;
+		  if(numCurrentEvents == 0) {
+			  // Normalization takes effect. 
+			  if(currentLevel > NORMALIZATION_LEVEL) {
+				  currentLevel -= timeStep * normalizationRate;
+			  } else {
+				  currentLevel += timeStep * normalizationRate;
+			  }
+		  }
+		  currentLevel = currentLevel + netGlycemicRate * timeStep;
 		  output.add(Pair.with(timeSamples.get(i), currentLevel));
-		  normalizationRate = (Math.abs(currentLevel - NORMALIZATION_LEVEL) < Math.ulp(currentLevel)) ?
-				  0.0f : (currentLevel > NORMALIZATION_LEVEL ? -1.0f : 1.0f);
 	  }
 	  return output;
   }

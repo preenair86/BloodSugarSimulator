@@ -77,13 +77,10 @@ var getInitialData = function() {
 	var method = "GET";
 	var currentPath = getContextPath();
 	var url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/getFoodList");
-	//var url = "http://localhost:8080/BloodSugarSimulator/simulator/getFoodList";
 	ajaxCall(url, method, null, loadFoodList);
 	url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/getExerciseList");
-	//url = "http://localhost:8080/BloodSugarSimulator/simulator/getExerciseList";
 	ajaxCall(url, method, null, loadExerciseList);
 	url = getNewAbsolutePath(currentPath, "simulator.jsp", "simulator/getTimeList");
-	//url = "http://localhost:8080/BloodSugarSimulator/simulator/getTimeList";
 	ajaxCall(url, method, null, loadTimeList);
 }
 
