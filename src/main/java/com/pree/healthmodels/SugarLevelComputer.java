@@ -27,6 +27,7 @@ public class SugarLevelComputer {
 		Collections.sort(keyedEvents,
 				new Comparator<Triplet<LocalTime, Boolean, SugarLevelEvent>>() {
 					public int compare(
+							//TODO(preenair): Check if comparator output signs should be reversed.
 							Triplet<LocalTime, Boolean, SugarLevelEvent> o1,
 							Triplet<LocalTime, Boolean, SugarLevelEvent> o2) {
 						return o1.getValue0().isEqual(o2.getValue0()) ? 0 : (o1
@@ -47,11 +48,11 @@ public class SugarLevelComputer {
 		List<Integer> outputGlycation = new ArrayList<Integer>();
 		
 		for (int i = 0; i < timeSamples.size(); ++i) {
-			if (i != 0) {
+			if (i > 0) {
 				// Compute the current level based on food exercise and normalization
 				// factors. For i == 0 case, we set the level to INITIAL_LEVEL.
 				
-				// Find all the events which are within the new time sample.
+				// Find all the events which are before or at the new time sample.
 				while (nextEventIndex < keyedEvents.size()
 						&& !keyedEvents.get(nextEventIndex).getValue0()
 								.isAfter(timeSamples.get(i))) {
@@ -64,8 +65,8 @@ public class SugarLevelComputer {
 					// or exercise event, and whether the current point is a
 					// start or end point.
 					netGlycemicRate += changeInGlycemicRate
-							* (nextEventTriplet.getValue1() ? 1 : -1)
-							* (event.getFactor().isDoesIncrease() ? 1 : -1);
+							* (nextEventTriplet.getValue1() ? 1 : -1) /* Is the event a start or end time */
+							* (event.getFactor().isDoesIncrease() ? 1 : -1); /* Is the event food or exercise */ 
 					// Update the number of events.
 					if (nextEventTriplet.getValue1()) {
 						++numCurrentEvents;
@@ -107,14 +108,14 @@ public class SugarLevelComputer {
 			List<SugarLevelEvent> events) {
 		List<Triplet<LocalTime, Boolean, SugarLevelEvent>> output = new ArrayList<Triplet<LocalTime, Boolean, SugarLevelEvent>>();
 		for (SugarLevelEvent e : events) {
-			LocalTime currentTime = e.getStartTime();
-			output.add(Triplet.with(currentTime, true, e));
-			System.out.println("Time is " + currentTime.toString());
+			LocalTime startTime = e.getStartTime();
+			output.add(Triplet.with(startTime, true, e));
+			System.out.println("Time is " + startTime.toString());
 			System.out.println(". Current duration is "
 					+ (int) e.getFactor().getDuration());
-			currentTime = currentTime.plusMinutes((int) e.getFactor()
+			LocalTime endTime = startTime.plusMinutes((int) e.getFactor()
 					.getDuration());
-			output.add(Triplet.with(currentTime, false, e));
+			output.add(Triplet.with(endTime, false, e));
 		}
 		return output;
 	}

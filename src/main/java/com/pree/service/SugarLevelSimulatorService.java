@@ -57,13 +57,13 @@ public class SugarLevelSimulatorService {
 	}
 
 	public static SugarLevelControllerOutputs simulateGlucoseLevels(
-			SugarLevelControllerInputs input) {
-		System.out.println("Simulator input is " + input.toString());
-		List<SugarLevelEvent> events = toSugarLevelEvents(input);
+			SugarLevelControllerInputs controllerInput) {
+		System.out.println("Simulator input is " + controllerInput.toString());
+		List<SugarLevelEvent> serviceInput = toSugarLevelEvents(controllerInput);
 		SugarLevelDao dao = new SugarLevelDao();
 		List<LocalTime> times = getSampledTimeList(dao.getStartTime(), dao.getEndTime(), dao.getDisplayTimeStep());
-		SugarLevelOutput glucoseLevels = SugarLevelComputer.getGlucoseLevels(times, events);
-		return toSugarLevelSimulatorOutput(glucoseLevels);
+		SugarLevelOutput serviceOutput = SugarLevelComputer.getGlucoseLevels(times, serviceInput);
+		return toSugarLevelSimulatorOutput(serviceOutput);
 	}
 
 	// Convert controller input to service input.
@@ -98,6 +98,7 @@ public class SugarLevelSimulatorService {
 	}
 
 	// Get a list of times given startTime, endTime and timeStep.
+	// TODO(preenair): Use the same function for getTimeList();
 	public static List<LocalTime> getSampledTimeList(LocalTime startTime,
 			LocalTime endTime, float timeStep) {
 		List<LocalTime> output = new ArrayList<LocalTime>();
