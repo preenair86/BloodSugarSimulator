@@ -14,12 +14,10 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.pree.controller.SugarLevelInputPoint;
 import com.pree.controller.SugarLevelOutputPoint;
-import com.pree.controller.SugarLevelSimulatorInputs;
-import com.pree.controller.SugarLevelSimulatorOutputs;
+import com.pree.controller.SugarLevelControllerInputs;
+import com.pree.controller.SugarLevelControllerOutputs;
 import com.pree.dao.SugarLevelDao;
 import com.pree.healthmodels.SugarLevelComputer;
-import com.pree.healthmodels.SugarLevelEvent;
-import com.pree.healthmodels.SugarLevelFactor;
 
 public class SugarLevelSimulatorService {
 	private static Map<String, SugarLevelFactor> nameToFactor;
@@ -58,18 +56,19 @@ public class SugarLevelSimulatorService {
 		SugarLevelSimulatorService.nameToFactor = factorToProperties;
 	}
 
-	public static SugarLevelSimulatorOutputs simulateGlucoseLevels(
-			SugarLevelSimulatorInputs input) {
+	public static SugarLevelControllerOutputs simulateGlucoseLevels(
+			SugarLevelControllerInputs input) {
 		System.out.println("Simulator input is " + input.toString());
 		List<SugarLevelEvent> events = toSugarLevelEvents(input);
 		SugarLevelDao dao = new SugarLevelDao();
-		List<Pair<LocalTime, Float>> glucoseLevels = SugarLevelComputer
-				.getGlucoseLevels(dao.getStartTime(), dao.getEndTime(), dao.getDisplayTimeStep(), events);
+		List<LocalTime> times = getSampledTimeList(dao.getStartTime(), dao.getEndTime(), dao.getDisplayTimeStep());
+		SugarLevelOutput glucoseLevels = SugarLevelComputer.getGlucoseLevels(times, events);
 		return toSugarLevelSimulatorOutput(glucoseLevels);
 	}
 
+	// Convert controller input to service input.
 	private static List<SugarLevelEvent> toSugarLevelEvents(
-			SugarLevelSimulatorInputs input) {
+			SugarLevelControllerInputs input) {
 		List<SugarLevelEvent> output = new ArrayList<SugarLevelEvent>();
 		for (SugarLevelInputPoint point : input.getData()) {
 			SugarLevelFactor currentFactor = nameToFactor.get(point.getName()); 
@@ -81,18 +80,32 @@ public class SugarLevelSimulatorService {
 		}
 		return output;
 	}
-	
-	private static SugarLevelSimulatorOutputs toSugarLevelSimulatorOutput(
-			List<Pair<LocalTime, Float>> input) {
+
+	// Convert service output to controller output.
+	private static SugarLevelControllerOutputs toSugarLevelSimulatorOutput(
+			SugarLevelOutput output) {
 		List<SugarLevelOutputPoint> points = new ArrayList<SugarLevelOutputPoint>();
-		for(Pair<LocalTime, Float> glucoseLevel : input) {
+		for(int i = 0; i < output.getGlucose().size(); ++i) {
 			SugarLevelOutputPoint currentPoint = new SugarLevelOutputPoint();
-			currentPoint.setGlucoselevel(glucoseLevel.getValue1());
-			currentPoint.setTime(glucoseLevel.getValue0().toString());
+			currentPoint.setGlucoselevel(output.getGlucose().get(i));
+			currentPoint.setGlycationLevel(output.getGlycation().get(i));
+			currentPoint.setTime(output.getTimes().get(i).toString());
 			points.add(currentPoint);
 		}
-		SugarLevelSimulatorOutputs output = new SugarLevelSimulatorOutputs();
-		output.setData(points);
+		SugarLevelControllerOutputs controllerOutput = new SugarLevelControllerOutputs();
+		controllerOutput.setData(points);
+		return controllerOutput;
+	}
+
+	// Get a list of times given startTime, endTime and timeStep.
+	public static List<LocalTime> getSampledTimeList(LocalTime startTime,
+			LocalTime endTime, float timeStep) {
+		List<LocalTime> output = new ArrayList<LocalTime>();
+		LocalTime currentTime = startTime;
+		while (!currentTime.isAfter(endTime)) {
+			output.add(currentTime);
+			currentTime = currentTime.plusMinutes((int) timeStep);
+		}
 		return output;
 	}
 }

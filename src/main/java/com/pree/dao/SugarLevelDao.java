@@ -14,7 +14,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.joda.time.LocalTime;
 
-import com.pree.healthmodels.SugarLevelFactor;
+import com.pree.service.SugarLevelFactor;
 
 public class SugarLevelDao {
 	private static final String FOOD_DB="FoodDB.csv";
@@ -30,8 +30,11 @@ public class SugarLevelDao {
 	public SugarLevelDao() {
 		startTime = new LocalTime(7, 0);
 		endTime = new LocalTime(22, 0);
+		
+		// In minutes
 		listTimeStep = 30.0f;
 		displayTimeStep = 1.0f;
+		
 		loadFoodDB();
 		loadExerciseDB();
 	}
@@ -88,6 +91,7 @@ public class SugarLevelDao {
 		}
 	}
 	
+	// TODO(preenair): Move this logic to service layer.
 	public List<String> getFoodList() {
 		List<String> output = new ArrayList<String>();
 		for(SugarLevelFactor f : foodDB) {

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SugarLevelSimulatorInputs {    
+// Input data from the user interface.
+public class SugarLevelControllerInputs {    
     private List<SugarLevelInputPoint> data;
 
 	public List<SugarLevelInputPoint> getData() {

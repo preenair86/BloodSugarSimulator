@@ -1,8 +1,17 @@
 package com.pree.controller;
 
 public class SugarLevelOutputPoint {
+	public int getGlycationLevel() {
+		return glycationLevel;
+	}
+
+	public void setGlycationLevel(int glycationLevel) {
+		this.glycationLevel = glycationLevel;
+	}
+
 	private String time;
 	private float glucoselevel;
+	private int glycationLevel;
 
 	public String getTime() {
 		return time;

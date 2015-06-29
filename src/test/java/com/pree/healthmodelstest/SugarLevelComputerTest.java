@@ -12,8 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.pree.healthmodels.SugarLevelComputer;
-import com.pree.healthmodels.SugarLevelEvent;
-import com.pree.healthmodels.SugarLevelFactor;
+import com.pree.service.SugarLevelEvent;
+import com.pree.service.SugarLevelFactor;
+import com.pree.service.SugarLevelOutput;
+import com.pree.service.SugarLevelSimulatorService;
 
 public class SugarLevelComputerTest {
 	private LocalTime startTime = new LocalTime(7, 0);
@@ -32,10 +34,13 @@ public class SugarLevelComputerTest {
 		eventFactor.setRate(240);
 		
 		events.add(new SugarLevelEvent(eventFactor, eventTime));
-		List<Pair<LocalTime, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
+		List<LocalTime> times = SugarLevelSimulatorService.getSampledTimeList(startTime, endTime, timeStep);
+		SugarLevelOutput actualOutput = SugarLevelComputer.getGlucoseLevels(times, events);
 		System.out.println("Expected output of singleEventTest is ");
-		for(int i = 0; i < actualOutput.size(); ++i) {
-			System.out.println("Time: " + actualOutput.get(i).getValue0() + ", Glucose Level is " + actualOutput.get(i).getValue1());
+		for(int i = 0; i < actualOutput.getTimes().size(); ++i) {
+			System.out.println("Time: " + actualOutput.getTimes().get(i) + 
+					", Glucose Level is " + actualOutput.getGlucose().get(i) +
+					", Glycation is " + actualOutput.getGlycation().get(i));
 		}
 	}
 	
@@ -57,10 +62,13 @@ public class SugarLevelComputerTest {
 		
 		events.add(new SugarLevelEvent(eventFactor2, eventTime2));
 		events.add(new SugarLevelEvent(eventFactor1, eventTime1));
-		List<Pair<LocalTime, Float>> actualOutput = SugarLevelComputer.getGlucoseLevels(startTime, endTime, timeStep, events);
+		List<LocalTime> times = SugarLevelSimulatorService.getSampledTimeList(startTime, endTime, timeStep);
+		SugarLevelOutput actualOutput = SugarLevelComputer.getGlucoseLevels(times, events);
 		System.out.println("Expected output of twoEventTest is ");
-		for(int i = 0; i < actualOutput.size(); ++i) {
-			System.out.println("Time: " + actualOutput.get(i).getValue0() + ", Glucose Level is " + actualOutput.get(i).getValue1());
+		for(int i = 0; i < actualOutput.getTimes().size(); ++i) {
+			System.out.println("Time: " + actualOutput.getTimes().get(i) + 
+					", Glucose Level is " + actualOutput.getGlucose().get(i) +
+					", Glycation is " + actualOutput.getGlycation().get(i));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Controller which interacts with the user interface.
+// Controller which interacts with the user interface. It is implemented as a RESTful web service.
 package com.pree.controller;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.pree.dao.SugarLevelDao;
-import com.pree.healthmodels.SugarLevelFactor;
+import com.pree.service.SugarLevelFactor;
 import com.pree.service.SugarLevelSimulatorService;
 
 @Path("")
@@ -35,7 +35,7 @@ public class SugarLevelSimulatorController {
 	@Consumes("application/json")
 	public String plotGraph(String input) {
 		Gson gson = new Gson();
-		SugarLevelSimulatorInputs simulatorInput = gson.fromJson(input,SugarLevelSimulatorInputs.class);
+		SugarLevelControllerInputs simulatorInput = gson.fromJson(input,SugarLevelControllerInputs.class);
 		System.out.println("Input is " + simulatorInput.toString());
 		SugarLevelDao dao = new SugarLevelDao();
 		Map<String, SugarLevelFactor> nameToFactor = dao.getNameToFactor();
