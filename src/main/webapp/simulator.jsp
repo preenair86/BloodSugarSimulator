@@ -41,7 +41,7 @@
 								<label for="sel1">Time:</label>
 								<select class="form-control" id="food_time_selector"></select>
 								<button type="button" class="btn btn-primary"
-									onclick="addFoodConsumption()">Add Food Consumption</button>
+										onclick="addFoodConsumption()">Add Food</button>
 							</div>
 						</div>
 					</div>
@@ -57,7 +57,7 @@
 									id="exercise_time_selector">
 								</select>
 								<button type="button" class="btn btn-primary"
-									onclick="addExerciseActivity()">Add Exercise Activity</button>
+										onclick="addExerciseActivity()">Add Exercise</button>
 							</div>
 						</div>
 					</div>

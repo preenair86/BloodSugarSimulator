@@ -21,10 +21,11 @@ public class SugarLevelDao {
 	private static final String EXERCISE_DB="ExerciseDB.csv";
 	private LocalTime startTime;
 	private LocalTime endTime;
-	private float timeStep;
+	private float listTimeStep;
+	private float displayTimeStep;
 	
-	private static List<SugarLevelFactor> foodDB;
-	private static List<SugarLevelFactor> exerciseDB;
+	private List<SugarLevelFactor> foodDB;
+	private List<SugarLevelFactor> exerciseDB;
 	
 	private void loadFoodDB() {
 		foodDB = new ArrayList<SugarLevelFactor>();
@@ -81,7 +82,8 @@ public class SugarLevelDao {
 	public SugarLevelDao() {
 		startTime = new LocalTime(7, 0);
 		endTime = new LocalTime(22, 0);
-		timeStep = 30.0f;
+		listTimeStep = 30.0f;
+		displayTimeStep = 10.0f;
 		loadFoodDB();
 		loadExerciseDB();
 	}
@@ -112,13 +114,21 @@ public class SugarLevelDao {
 		}
 		return nameToFactor;
 	}
-	
-	public float getTimeStep() {
-		return timeStep;
+
+	public float getListTimeStep() {
+		return listTimeStep;
 	}
 
-	public void setTimeStep(float timeStep) {
-		this.timeStep = timeStep;
+	public void setListTimeStep(float listTimeStep) {
+		this.listTimeStep = listTimeStep;
+	}
+
+	public float getDisplayTimeStep() {
+		return displayTimeStep;
+	}
+
+	public void setDisplayTimeStep(float displayTimeStep) {
+		this.displayTimeStep = displayTimeStep;
 	}
 
 	public LocalTime getStartTime() {

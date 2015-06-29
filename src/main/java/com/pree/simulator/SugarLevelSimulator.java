@@ -35,7 +35,7 @@ public class SugarLevelSimulator {
 		List<SugarLevelEvent> events = toSugarLevelEvents(input);
 		SugarLevelDao dao = new SugarLevelDao();
 		List<Pair<LocalTime, Float>> glucoseLevels = SugarLevelComputer
-				.getGlucoseLevels(dao.getStartTime(), dao.getEndTime(), dao.getTimeStep(), events);
+				.getGlucoseLevels(dao.getStartTime(), dao.getEndTime(), dao.getDisplayTimeStep(), events);
 		return toSugarLevelSimulatorOutput(glucoseLevels);
 	}
 

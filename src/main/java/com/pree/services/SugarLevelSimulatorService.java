@@ -82,7 +82,7 @@ public class SugarLevelSimulatorService {
 		SugarLevelDao dao = new SugarLevelDao();
 		LocalTime startTime = dao.getStartTime();
 		LocalTime endTime = dao.getEndTime();
-		float timeStep = dao.getTimeStep();
+		float timeStep = dao.getListTimeStep();
 		while(startTime.isBefore(endTime)) {
 			timeList.add(startTime.toString("HH:mm"));
 			System.out.println(startTime.toString());
