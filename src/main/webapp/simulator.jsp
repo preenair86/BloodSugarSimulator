@@ -40,8 +40,12 @@
 								<select class="form-control" id="food_selector"></select>
 								<label for="sel1">Time:</label>
 								<select class="form-control" id="food_time_selector"></select>
-								<button type="button" class="btn btn-primary"
-										onclick="addFoodConsumption()">Add Food</button>
+							</div>
+							<div class="btn-group btn-group-justified">
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary"
+											onclick="addFoodConsumption()">Add Food</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -56,27 +60,38 @@
 								</select> <label for="sel1">Time:</label> <select class="form-control"
 									id="exercise_time_selector">
 								</select>
-								<button type="button" class="btn btn-primary"
-										onclick="addExerciseActivity()">Add Exercise</button>
+							</div>
+							<div class="btn-group btn-group-justified">
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary"
+											onclick="addExerciseActivity()">Add Exercise</button>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					<div class="panel panel-default">
-						<div class="panel-heading">Current Entries</div>
+						<div class="panel-heading">Today's history</div>
 						<div class="panel-body">
-							<textarea class="form-control" rows="10" id="current_entries"></textarea>
-						</div>
-						<div class="centered">
-							<button type="button" class="btn btn-primary" onclick="simulate()">Plot</button>
+							<textarea class="form-control" rows="6" id="history"></textarea>
+							<div class="btn-group btn-group-justified">
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" onclick="simulate()" id="plot">Plot</button>
+								</div>
+								<div class="btn-group">
+									<button type="button" class="btn btn-primary" onclick="clearData()" id="clear">Clear</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">Glucose Level Simulation</div>
+					<div class="panel-heading">
+						Glucose Level Simulation
+					</div>
 					<div class="panel-body">
 						<div id="glucose_plot"></div>
 					</div>

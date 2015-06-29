@@ -8,10 +8,15 @@ var getNewAbsolutePath = function(absolutePath, previousSuffix, newSuffix) {
 	return absolutePath.replace(previousSuffix, newSuffix);
 }
 
+var clearData = function() {
+	simulatorInput.data = [];
+	document.getElementById("history").value = getSimulatorInputText();
+}
+
 var getSimulatorInputText = function() {
   var output = "";
   for(var i = 0; i < simulatorInput.data.length; i++) {
-	  output  = output + "Type:" + simulatorInput.data[i].name + ". Time:" + simulatorInput.data[i].time + "\n";
+	  output  = output + simulatorInput.data[i].name + " at " + simulatorInput.data[i].time + "\n";
   }
   return output;
 }
@@ -22,7 +27,7 @@ var addFoodConsumption = function() {
 	var foodName = foodSelector.options[foodSelector.selectedIndex].text;
 	var foodTime = timeSelector.options[timeSelector.selectedIndex].text;
 	simulatorInput.data.push({name:foodName, isFood:true,time:foodTime});
-	document.getElementById("current_entries").value = getSimulatorInputText();
+	document.getElementById("history").value = getSimulatorInputText();
 }
 
 var addExerciseActivity = function() {
@@ -31,7 +36,7 @@ var addExerciseActivity = function() {
 	var exerciseName = exerciseSelector.options[exerciseSelector.selectedIndex].text;
 	var exerciseTime = timeSelector.options[timeSelector.selectedIndex].text;
 	simulatorInput.data.push({name:exerciseName, isFood:false,time:exerciseTime});
-	document.getElementById("current_entries").value = getSimulatorInputText();
+	document.getElementById("history").value = getSimulatorInputText();
 }
 
 var loadFoodList = function(foodList) {
@@ -96,6 +101,11 @@ var plotGraph = function(object) {
 	var options = {
 		title : 'Variation in glucose levels',
 		curveType : 'function',
+		vAxis : {
+			viewWindowMode : 'explicit',
+			minvalue: 0,
+			maxValue: 200,
+		},
 		legend : {
 			position : 'bottom'
 		}
@@ -133,29 +143,4 @@ var ajaxCall = function(urlToSend, method, jsonString, outputFunction) {
 	} else {
 		xmlhttp.send(jsonString);	
 	}
-	
-	/*var callbackMethod = function(data) {
-		console.log("Response " + JSON.stringify(data));
-		outputFunction(data);
-	}
-	$.ajax({
-         url: urlToSend,
-         type: method,
-	     data: jsonString,
-	     contentType: "application/json",
-	     complete: callbackMethod});*/
-	
-	/*jsonString = '{"data":[{"name":"A","isFood":true,"time":"Thu Jan 01 07:00:00 PST 1970"}]}';
-	jsonString = '{"data":[{"name":"Food","isFood":true,"time":"09:00:00"}] }';
-	if (method == "GET") {
-		$.get(urlToSend, function(data, status){
-	        alert("Data: " + data + "\nStatus: " + status);
-	        outputFunction(data);
-	    });
-	} else {
-		$.post(urlToSend, jsonString, function(data, status) {
-			console.log("Response " + JSON.stringify(data));
-			outputFunction(data);
-		});
-	}*/
 }

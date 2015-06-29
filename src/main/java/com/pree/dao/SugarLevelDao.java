@@ -27,6 +27,15 @@ public class SugarLevelDao {
 	private List<SugarLevelFactor> foodDB;
 	private List<SugarLevelFactor> exerciseDB;
 	
+	public SugarLevelDao() {
+		startTime = new LocalTime(7, 0);
+		endTime = new LocalTime(22, 0);
+		listTimeStep = 30.0f;
+		displayTimeStep = 1.0f;
+		loadFoodDB();
+		loadExerciseDB();
+	}
+	
 	private void loadFoodDB() {
 		foodDB = new ArrayList<SugarLevelFactor>();
 		Reader in = null;
@@ -79,15 +88,6 @@ public class SugarLevelDao {
 		}
 	}
 	
-	public SugarLevelDao() {
-		startTime = new LocalTime(7, 0);
-		endTime = new LocalTime(22, 0);
-		listTimeStep = 30.0f;
-		displayTimeStep = 10.0f;
-		loadFoodDB();
-		loadExerciseDB();
-	}
-
 	public List<String> getFoodList() {
 		List<String> output = new ArrayList<String>();
 		for(SugarLevelFactor f : foodDB) {
