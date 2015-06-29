@@ -1,4 +1,4 @@
-package com.pree.simulator;
+package com.pree.controller;
 
 public class SugarLevelInputPoint {
 	public String getName() {

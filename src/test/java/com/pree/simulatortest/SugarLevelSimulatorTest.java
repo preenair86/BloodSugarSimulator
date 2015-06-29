@@ -12,12 +12,12 @@ import java.util.Map;
 import org.javatuples.Pair;
 import org.junit.Test;
 
+import com.pree.controller.SugarLevelInputPoint;
+import com.pree.controller.SugarLevelSimulatorInputs;
+import com.pree.controller.SugarLevelSimulatorOutputs;
 import com.pree.healthmodels.SugarLevelEvent;
 import com.pree.healthmodels.SugarLevelFactor;
-import com.pree.simulator.SugarLevelInputPoint;
-import com.pree.simulator.SugarLevelSimulator;
-import com.pree.simulator.SugarLevelSimulatorInputs;
-import com.pree.simulator.SugarLevelSimulatorOutputs;
+import com.pree.service.SugarLevelSimulatorService;
 
 public class SugarLevelSimulatorTest {
 	@Test
@@ -44,7 +44,7 @@ public class SugarLevelSimulatorTest {
 			point.setTime(times[i]);
 			input.add(point);
 		}
-		SugarLevelSimulator simulator = new SugarLevelSimulator();
+		SugarLevelSimulatorService simulator = new SugarLevelSimulatorService();
 		simulator.setNameToFactor(nameToFactor);
 		SugarLevelSimulatorInputs simulatorInputs = new SugarLevelSimulatorInputs();
 		simulatorInputs.setData(input);

@@ -1,4 +1,4 @@
-package com.pree.simulator;
+package com.pree.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
