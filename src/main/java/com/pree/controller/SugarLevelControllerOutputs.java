@@ -1,8 +1,9 @@
-package com.pree.simulator;
+package com.pree.controller;
 
 import java.util.List;
 
-public class SugarLevelSimulatorOutputs {
+// Output data to be passed to the user interface.
+public class SugarLevelControllerOutputs {
 	public List<SugarLevelOutputPoint> getData() {
 		return data;
 	}

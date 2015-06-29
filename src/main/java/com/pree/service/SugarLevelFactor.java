@@ -1,4 +1,4 @@
-package com.pree.healthmodels;
+package com.pree.service;
 
 // A factor that influences the blood sugar level.
 public class SugarLevelFactor {

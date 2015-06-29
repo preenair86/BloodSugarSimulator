@@ -12,12 +12,12 @@ import java.util.Map;
 import org.javatuples.Pair;
 import org.junit.Test;
 
-import com.pree.healthmodels.SugarLevelEvent;
-import com.pree.healthmodels.SugarLevelFactor;
-import com.pree.simulator.SugarLevelInputPoint;
-import com.pree.simulator.SugarLevelSimulator;
-import com.pree.simulator.SugarLevelSimulatorInputs;
-import com.pree.simulator.SugarLevelSimulatorOutputs;
+import com.pree.controller.SugarLevelInputPoint;
+import com.pree.controller.SugarLevelControllerInputs;
+import com.pree.controller.SugarLevelControllerOutputs;
+import com.pree.service.SugarLevelEvent;
+import com.pree.service.SugarLevelFactor;
+import com.pree.service.SugarLevelSimulatorService;
 
 public class SugarLevelSimulatorTest {
 	@Test
@@ -44,13 +44,13 @@ public class SugarLevelSimulatorTest {
 			point.setTime(times[i]);
 			input.add(point);
 		}
-		SugarLevelSimulator simulator = new SugarLevelSimulator();
+		SugarLevelSimulatorService simulator = new SugarLevelSimulatorService();
 		simulator.setNameToFactor(nameToFactor);
-		SugarLevelSimulatorInputs simulatorInputs = new SugarLevelSimulatorInputs();
+		SugarLevelControllerInputs simulatorInputs = new SugarLevelControllerInputs();
 		simulatorInputs.setData(input);
 		System.out.println("Input is ");
 		System.out.println(simulatorInputs.toString());
-		SugarLevelSimulatorOutputs simulatorOutputs = simulator.simulateGlucoseLevels(simulatorInputs);
+		SugarLevelControllerOutputs simulatorOutputs = simulator.simulateGlucoseLevels(simulatorInputs);
 		System.out.println("Output is " + simulatorOutputs.toString());
 	}
 }

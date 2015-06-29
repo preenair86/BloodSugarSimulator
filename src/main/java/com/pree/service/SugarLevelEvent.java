@@ -1,4 +1,4 @@
-package com.pree.healthmodels;
+package com.pree.service;
 
 import java.util.Date;
 

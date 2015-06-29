@@ -94,15 +94,18 @@ var plotGraph = function(object) {
 	// Add columns
 	data.addColumn('string', 'Time');
 	data.addColumn('number', 'Glucose Level');
+	data.addColumn('number', 'Glycation Level');
 	data.addRows(object.data.length);
 	for (i = 0; i < object.data.length; i++) {
 		data.setCell(i, 0, object.data[i].time);
 		data.setCell(i, 1, object.data[i].glucoselevel);
+		data.setCell(i, 2, object.data[i].glycationLevel);
 	}
 	var options = {
 		title : 'Variation in glucose levels',
 		curveType : 'function',
-		colors: ['#2069a8'],
+		colors: ['#2069a8', 'red'],
+		areaOpacity: '0.1',
 		vAxis : {
 			minvalue: 0,
 			maxValue: 200,
